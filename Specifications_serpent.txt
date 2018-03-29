@@ -1,0 +1,6 @@
+Spécifications Serpent:
+ - Taille min : 5 Cubes;
+ - Taille max : 25 Cubes;
+ - Vitesse Initiale : 10/sec;
+ - Vitesse Lente : 5/sec;
+ - Vitesse Rapide : 20/sec;

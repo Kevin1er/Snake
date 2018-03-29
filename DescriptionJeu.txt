@@ -1,0 +1,17 @@
+Jeu Snake :
+- Déplacements libres (Avant, Arrière, Gauche, Droite, Haut, Bas);
+- Haut et Bas disponibles quand contact avec un mur, trou;
+- Caméra en vue 3ème personne (Caméra en dessus et en arrière);
+- Plusieurs niveaux (Ville, Maison, ...);
+- Mouvements du serpent libres;
+- Objets du décors en mouvement;
+- Objets à ramasser pour obtenir des bonus / malus (Grandir, Rapetisser, Effets caméra, ...);
+- Pièges statiques (Tourelles(Ciblage auto), Tourelles(Statiques), Pics, ...);
+- Objectifs à réaliser dans le niveau (Atteindre une certaine taille, Trouver un objet, Appuyer sur des boutons/leviers, ...);
+- Niveau terminé quand tous les objectifs sont atteints;
+- HUD :
+    * Nombre de vies;
+    * Objectif en cours;
+
+(- Fichier de sauvegarde;)
+(- Musiques;)
