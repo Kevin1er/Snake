@@ -7,19 +7,22 @@
 #define SIZE_CUBE 0.5
 #define PI 3.14
 
-GLfloat recul;
+GLfloat recul, angle;
 vector3D tete, camera;
-vector2D rotCamera, oldRotCamera;
+vector3D rotCamera, oldRotCamera;
 
 void init()
 {
 	tete = vector3dInit(0.5,0.5,0.5);
 	recul = 10.0;
-	rotCamera = vector2dInit(0.0,0.0);
+	rotCamera = vector3dInit(0.0,0.0,1.0);
+	angle = 0.0;
 }
 
 void Animer()
 {
+	angle = (acos( vector3dGetScalaire(rotCamera, tete) / (vector3dGetNormee(rotCamera) * vector3dGetNormee(tete))) * 180) / PI;
+	printf("angle : %f\n", angle);
 	glutPostRedisplay();
 }
 
@@ -61,7 +64,7 @@ void processMousePassiveMotion(int _x, int _y)
 	glutPostRedisplay();
 }
 
-void trace_cube()
+void trace_map()
 {
 	glBegin(GL_QUADS);
 
@@ -71,6 +74,18 @@ void trace_cube()
 	glVertex3f(0,10,0);
 	glVertex3f(10,10,0);
 	glVertex3f(10,0,0);
+
+	glEnd();
+}
+
+void trace_cube()
+{
+	glPushMatrix();
+	glTranslatef(tete.x,tete.y,tete.z);
+	glRotatef(angle, 0,0,1);
+	glTranslatef(-tete.x,-tete.y,-tete.z);
+
+	glBegin(GL_QUADS);
 
 	//Cube Face_avant
 	glColor3f(0.0,1.0,0.0);
@@ -114,9 +129,9 @@ void trace_cube()
 	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//H
 	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//D
 
-
 	glEnd();
-	glutSwapBuffers();
+
+	glPopMatrix();
 }
 
 void affichage()
@@ -128,10 +143,15 @@ void affichage()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+
 	glFrustum(-4.8,4.8,-2.7,2.7,2,500);
 	gluLookAt(camera.x, camera.y, camera.z, tete.x, tete.y, tete.z,0,0,1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
+	trace_map();
 	trace_cube();
+	glutSwapBuffers();
 
 	glFlush();
 }
@@ -145,6 +165,7 @@ int main(int argc, char *argv[])
   	glutInitWindowPosition(0,0);
   	glutCreateWindow("Fenetre");
   	glEnable(GL_DEPTH_TEST);
+
 	//glutSetCursor(GLUT_CURSOR_NONE);
   	glutDisplayFunc(affichage);
 	glutIdleFunc(Animer);

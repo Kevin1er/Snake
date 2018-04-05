@@ -30,6 +30,35 @@ vector3D vector3dGetNorme(vector3D _vector)
 }
 
 /**
+*Fonction qui retourne la norme d'un vecteur 3d
+**/
+GLfloat vector3dGetNormee(vector3D _vector)
+{
+    return sqrt(pow(_vector.x,2) + pow(_vector.y,2) + pow(_vector.z,2));
+}
+
+/**
+*Fonction qui retourne le produit vectoriel de deux vecteurs
+**/
+vector3D vector3dGetVectoriel(vector3D _vector, vector3D _vector2)
+{
+    vector3D result;
+    result.x = (_vector.y * _vector2.z) - (_vector.z * _vector2.y);
+    result.y = (_vector.z * _vector2.x) - (_vector.x * _vector2.z);
+    result.z = (_vector.x * _vector2.y) - (_vector.y * _vector2.x);
+
+    return result;
+}
+
+/**
+*Fonction qui retourne le produit scalaire de deux vecteurs
+**/
+GLfloat vector3dGetScalaire(vector3D _vector, vector3D _vector2)
+{
+    return (_vector.x * _vector2.x) + (_vector.y * _vector2.y) + (_vector.z * _vector2.z);
+}
+
+/**
 *Fonction d'initialisation d'un vecteur 2D avec des valeurs données.
 **/
 vector2D vector2dInit(GLfloat _x, GLfloat _y)

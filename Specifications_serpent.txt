@@ -4,3 +4,10 @@ Spécifications Serpent:
  - Vitesse Initiale : 10/sec;
  - Vitesse Lente : 5/sec;
  - Vitesse Rapide : 20/sec;
+
+ cos a = <u,v> / (||u|| * ||v||)
+ sin a = ||u^v|| / (||u|| * ||v||)
+
+ Où <u,v> désigne le produit scalaire, u^v le produit vectoriel et ||.|| la norme euclidienne.
+ Ainsi :
+ cos a = (xu * xv + yu * yv + zu * zv) / (racine(xu²+yu²+zu²) * racine(xv²+yv²+zv²))
