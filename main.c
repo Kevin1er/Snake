@@ -2,27 +2,107 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <stdio.h>
-#include "vecteur.h"
+#include <stdlib.h>
+#include "objet.h"
 
 #define SIZE_CUBE 0.5
 #define PI 3.14
 
 GLfloat recul, angle;
-vector3D tete, camera;
-vector3D rotCamera, oldRotCamera;
+vector4D tete, camera;
+vector4D rotCamera, oldRotCamera;
+
+cube teteSnake;
+cube* cubeTete = &teteSnake;
+
+faceQuad sol;
+
+/*
+* Fonction d'initialisation du serpent.
+*/
+void initSnake()
+{
+	vector4D ptA, ptB, ptC, ptD, ptE,ptF,ptG, ptH;
+	faceQuad fHaut, fBas, fAvant, fArriere, fGauche, fDroite;
+
+	ptA = vector4dInit(0.0,0.0,0.0,1.0);
+	ptB = vector4dInit(0.0,0.0,1.0,1.0);
+	ptC = vector4dInit(1.0,0.0,1.0,1.0);
+	ptD = vector4dInit(1.0,0.0,0.0,1.0);
+	ptE = vector4dInit(0.0,1.0,0.0,1.0);
+	ptF = vector4dInit(0.0,1.0,1.0,1.0);
+	ptG = vector4dInit(1.0,1.0,1.0,1.0);
+	ptH = vector4dInit(1.0,1.0,0.0,1.0);
+
+	fHaut.couleur = vector3dInit(1.0,0.0,1.0);
+	fHaut.ptA = ptB;
+	fHaut.ptB = ptF;
+	fHaut.ptC = ptG;
+	fHaut.ptD = ptC;
+
+	fBas.couleur = vector3dInit(1.0,0.0,1.0);
+	fBas.ptA = ptA;
+	fBas.ptB = ptE;
+	fBas.ptC = ptH;
+	fBas.ptD = ptD;
+
+	fAvant.couleur = vector3dInit(0.0,1.0,0.0);
+	fAvant.ptA = ptA;
+	fAvant.ptB = ptB;
+	fAvant.ptC = ptC;
+	fAvant.ptD = ptD;
+
+	fArriere.couleur = vector3dInit(0.0,1.0,0.0);
+	fArriere.ptA = ptE;
+	fArriere.ptB = ptF;
+	fArriere.ptC = ptG;
+	fArriere.ptD = ptH;
+
+	fGauche.couleur = vector3dInit(0.0,0.0,1.0);
+	fGauche.ptA = ptE;
+	fGauche.ptB = ptF;
+	fGauche.ptC = ptB;
+	fGauche.ptD = ptA;
+
+	fDroite.couleur = vector3dInit(0.0,0.0,1.0);
+	fDroite.ptA = ptD;
+	fDroite.ptB = ptC;
+	fDroite.ptC = ptG;
+	fDroite.ptD = ptH;
+
+	printf("vvv\n");
+
+	cubeTete->fHaut = fHaut;
+	cubeTete->fBas = fBas;
+	cubeTete->fAvant = fAvant;
+	cubeTete->fArriere = fArriere;
+	cubeTete->fGauche = fGauche;
+	cubeTete->fDroite = fDroite;
+}
 
 void init()
 {
-	tete = vector3dInit(0.5,0.5,0.5);
+	sol.ptA = vector4dInit(0.0,0.0,0.0,1.0);
+	sol.ptB = vector4dInit(0.0,10.0,0.0,1.0);
+	sol.ptC = vector4dInit(10.0,10.0,0.0,1.0);
+	sol.ptD = vector4dInit(10.0,0.0,0.0,1.0);
+
+	printf("aaa\n");
+	initSnake();
+	printf("bbb\n");
+
+	tete = vector4dInit(0.5,0.5,0.5,1.0);
 	recul = 10.0;
-	rotCamera = vector3dInit(0.0,0.0,1.0);
+	rotCamera = vector4dInit(0.0,0.0,1.0,1.0);
 	angle = 0.0;
+
+	sol.couleur = vector3dInit(1.0,0.0,0.0);
 }
 
 void Animer()
 {
-	angle = (acos( vector3dGetScalaire(rotCamera, tete) / (vector3dGetNormee(rotCamera) * vector3dGetNormee(tete))) * 180) / PI;
-	printf("angle : %f\n", angle);
+	//rotationCube(cubeTete, 30.0);
+
 	glutPostRedisplay();
 }
 
@@ -30,20 +110,20 @@ void GererClavier(unsigned char _touche, int _x, int _y)
 {
 	if(_touche == 'z')
 	{
-		vector2D vecCamera = vector2dInit((tete.x - camera.x), (tete.y - camera.y));
+		/*vector2D vecCamera = vector2dInit((tete.x - camera.x), (tete.y - camera.y));
 		vector2D vecCameraNorm = vector2dGetNorme(vecCamera);
 		tete.x += .1 * vecCameraNorm.x;
-		tete.y += .1 * vecCameraNorm.y;
-
-		printf("X : %f\nY: %f\n\n", tete.x, tete.y);
+		tete.y += .1 * vecCameraNorm.y;*/
+		translationCube(cubeTete, vector4dInit(1.0,0.0,0.0,1.0));
 	}
 	if(_touche == 'q')
 	{
-		tete.x -= .1;
+		angle -= 1.0;
+		//printf("X : %f\nY: %f\nZ: %f\n\n", sol.ptB.x, sol.ptB.y, sol.ptB.z);
 	}
 	if(_touche == 'd')
 	{
-		tete.x += .1;
+		angle += 1.0;
 	}
 }
 
@@ -66,24 +146,15 @@ void processMousePassiveMotion(int _x, int _y)
 
 void trace_map()
 {
-	glBegin(GL_QUADS);
-
-	//Sol
-	glColor3f(1.0,0.0,0.0);
-	glVertex3f(0,0,0);
-	glVertex3f(0,10,0);
-	glVertex3f(10,10,0);
-	glVertex3f(10,0,0);
-
-	glEnd();
+	afficherFaceQuad(sol);
 }
 
 void trace_cube()
 {
-	glPushMatrix();
-	glTranslatef(tete.x,tete.y,tete.z);
-	glRotatef(angle, 0,0,1);
-	glTranslatef(-tete.x,-tete.y,-tete.z);
+	//glPushMatrix();
+	//glTranslatef(tete.x,tete.y,tete.z);
+	//glRotatef(angle, 0,0,1);
+	//glTranslatef(-tete.x,-tete.y,-tete.z);
 
 	glBegin(GL_QUADS);
 
@@ -131,7 +202,7 @@ void trace_cube()
 
 	glEnd();
 
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 void affichage()
@@ -150,7 +221,9 @@ void affichage()
 	glLoadIdentity();
 
 	trace_map();
-	trace_cube();
+	//trace_cube();
+
+	afficherCube(*cubeTete);
 	glutSwapBuffers();
 
 	glFlush();
@@ -159,6 +232,7 @@ void affichage()
 int main(int argc, char *argv[])
 {
 	init();
+	printf("finInit\n");
   	glutInit(&argc, argv);
   	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   	glutInitWindowSize(glutGet(GLUT_SCREEN_WIDTH),glutGet(GLUT_SCREEN_HEIGHT));

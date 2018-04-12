@@ -1,4 +1,4 @@
-/*#include <GL/gl.h>
+#include <GL/gl.h>
 #include <GL/glut.h>
 #include "vecteur.h"
 
@@ -11,5 +11,7 @@ struct mat4x4
     GLfloat w[4];
 };
 
-vector3D translation(vector3D _obj, vector3D _vector);
-vector3D matMult(vector3D _vector, mat4x4 _matrice);*/
+vector4D translation(vector4D _obj, vector4D _vector);
+vector4D rotation(vector4D _obj, GLfloat _angle, vector4D _vector);
+vector4D rotationZ(vector4D _obj, GLfloat _angle);
+vector4D matMult(mat4x4 _matrice, vector4D _vector);
