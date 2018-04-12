@@ -10,9 +10,11 @@ struct faceQuad
 typedef struct cube cube;
 struct cube
 {
-    faceQuad fHaut, fBas, fAvant, fArriere, fGauche, fDroite;
+    vector4D centre;
+    vector4D ptA, ptB, ptC, ptD, ptE, ptF, ptG, ptH;
 };
 
+cube initCube(vector4D _centre, GLfloat _demiLongueur);
 void afficherFaceQuad(faceQuad _face);
 void afficherCube(cube _cube);
 void rotationCube(cube* _cube, GLfloat _angle);

@@ -22,7 +22,9 @@ faceQuad sol;
 */
 void initSnake()
 {
+	/*
 	vector4D ptA, ptB, ptC, ptD, ptE,ptF,ptG, ptH;
+
 	faceQuad fHaut, fBas, fAvant, fArriere, fGauche, fDroite;
 
 	ptA = vector4dInit(0.0,0.0,0.0,1.0);
@@ -33,6 +35,7 @@ void initSnake()
 	ptF = vector4dInit(0.0,1.0,1.0,1.0);
 	ptG = vector4dInit(1.0,1.0,1.0,1.0);
 	ptH = vector4dInit(1.0,1.0,0.0,1.0);
+
 
 	fHaut.couleur = vector3dInit(1.0,0.0,1.0);
 	fHaut.ptA = ptB;
@@ -78,6 +81,10 @@ void initSnake()
 	cubeTete->fArriere = fArriere;
 	cubeTete->fGauche = fGauche;
 	cubeTete->fDroite = fDroite;
+	*/
+
+	teteSnake = initCube(tete, 0.5);
+
 }
 
 void init()
@@ -101,7 +108,7 @@ void init()
 
 void Animer()
 {
-	//rotationCube(cubeTete, 30.0);
+	rotationCube(cubeTete, angle);
 
 	glutPostRedisplay();
 }
