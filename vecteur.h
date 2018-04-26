@@ -24,6 +24,7 @@ vector4D vector4dGetNormalise(vector4D _vector);
 GLfloat vector4dGetNorme(vector4D _vector);
 vector4D vector4dGetVectoriel(vector4D _vector, vector4D _vector2);
 GLfloat vector4dGetScalaire(vector4D _vector, vector4D _vector2);
+vector4D vector4dGetOppose(vector4D _vecteur);
 
 vector3D vector3dInit(GLfloat _x, GLfloat _y, GLfloat _z);
 vector3D vector3dGetNormalise(vector3D _vector);

@@ -105,14 +105,14 @@ void rotationCube(cube* _cube, GLfloat _angle)
 
     //vector4D axe = vector4dInit(ptBas.x - ptHaut.x, ptBas.y - ptHaut.y, ptBas.z - ptHaut.z,1.0);
 
-    _cube->ptA = rotationZ(_cube->ptA, _angle/*, axe*/);
-    _cube->ptB = rotationZ(_cube->ptB, _angle/*, axe*/);
-    _cube->ptC = rotationZ(_cube->ptC, _angle/*, axe*/);
-    _cube->ptD = rotationZ(_cube->ptD, _angle/*, axe*/);
-    _cube->ptE = rotationZ(_cube->ptE, _angle/*, axe*/);
-    _cube->ptF = rotationZ(_cube->ptF, _angle/*, axe*/);
-    _cube->ptG = rotationZ(_cube->ptG, _angle/*, axe*/);
-    _cube->ptH = rotationZ(_cube->ptH, _angle/*, axe*/);
+    _cube->ptA = rotationZ(_cube->ptA, _angle , _cube->centre);
+    _cube->ptB = rotationZ(_cube->ptB, _angle , _cube->centre);
+    _cube->ptC = rotationZ(_cube->ptC, _angle , _cube->centre);
+    _cube->ptD = rotationZ(_cube->ptD, _angle , _cube->centre);
+    _cube->ptE = rotationZ(_cube->ptE, _angle , _cube->centre);
+    _cube->ptF = rotationZ(_cube->ptF, _angle , _cube->centre);
+    _cube->ptG = rotationZ(_cube->ptG, _angle , _cube->centre);
+    _cube->ptH = rotationZ(_cube->ptH, _angle , _cube->centre);
 }
 
 /*
@@ -130,4 +130,14 @@ void translationCube(cube* _cube, vector4D _vector)
     _cube->ptF = translation(_cube->ptF, _vector);
     _cube->ptG = translation(_cube->ptG, _vector);
     _cube->ptH = translation(_cube->ptH, _vector);
+}
+
+/*
+* Fonction de déplacement d'un cube vers un point
+*/
+void deplacementCube(cube* _cube, vector4D _point)
+{
+    vector4D vector = vector4dInit(_point.x-_cube->centre.x, _point.y-_cube->centre.y, _point.z-_cube->centre.z, 1.0);
+
+    return translationCube(_cube, vector);
 }

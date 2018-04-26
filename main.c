@@ -7,6 +7,8 @@
 
 #define SIZE_CUBE 0.5
 #define PI 3.14
+#define TRUE 1
+#define FALSE 0
 
 GLfloat recul, angle;
 vector4D tete, camera;
@@ -17,88 +19,30 @@ cube* cubeTete = &teteSnake;
 
 faceQuad sol;
 
+int bAvant, bGauche, bDroite;
+
 /*
 * Fonction d'initialisation du serpent.
 */
 void initSnake()
 {
-	/*
-	vector4D ptA, ptB, ptC, ptD, ptE,ptF,ptG, ptH;
-
-	faceQuad fHaut, fBas, fAvant, fArriere, fGauche, fDroite;
-
-	ptA = vector4dInit(0.0,0.0,0.0,1.0);
-	ptB = vector4dInit(0.0,0.0,1.0,1.0);
-	ptC = vector4dInit(1.0,0.0,1.0,1.0);
-	ptD = vector4dInit(1.0,0.0,0.0,1.0);
-	ptE = vector4dInit(0.0,1.0,0.0,1.0);
-	ptF = vector4dInit(0.0,1.0,1.0,1.0);
-	ptG = vector4dInit(1.0,1.0,1.0,1.0);
-	ptH = vector4dInit(1.0,1.0,0.0,1.0);
-
-
-	fHaut.couleur = vector3dInit(1.0,0.0,1.0);
-	fHaut.ptA = ptB;
-	fHaut.ptB = ptF;
-	fHaut.ptC = ptG;
-	fHaut.ptD = ptC;
-
-	fBas.couleur = vector3dInit(1.0,0.0,1.0);
-	fBas.ptA = ptA;
-	fBas.ptB = ptE;
-	fBas.ptC = ptH;
-	fBas.ptD = ptD;
-
-	fAvant.couleur = vector3dInit(0.0,1.0,0.0);
-	fAvant.ptA = ptA;
-	fAvant.ptB = ptB;
-	fAvant.ptC = ptC;
-	fAvant.ptD = ptD;
-
-	fArriere.couleur = vector3dInit(0.0,1.0,0.0);
-	fArriere.ptA = ptE;
-	fArriere.ptB = ptF;
-	fArriere.ptC = ptG;
-	fArriere.ptD = ptH;
-
-	fGauche.couleur = vector3dInit(0.0,0.0,1.0);
-	fGauche.ptA = ptE;
-	fGauche.ptB = ptF;
-	fGauche.ptC = ptB;
-	fGauche.ptD = ptA;
-
-	fDroite.couleur = vector3dInit(0.0,0.0,1.0);
-	fDroite.ptA = ptD;
-	fDroite.ptB = ptC;
-	fDroite.ptC = ptG;
-	fDroite.ptD = ptH;
-
-	printf("vvv\n");
-
-	cubeTete->fHaut = fHaut;
-	cubeTete->fBas = fBas;
-	cubeTete->fAvant = fAvant;
-	cubeTete->fArriere = fArriere;
-	cubeTete->fGauche = fGauche;
-	cubeTete->fDroite = fDroite;
-	*/
-
 	teteSnake = initCube(tete, 0.5);
-
 }
 
 void init()
 {
+	bAvant = bGauche = bDroite = FALSE;
+
 	sol.ptA = vector4dInit(0.0,0.0,0.0,1.0);
-	sol.ptB = vector4dInit(0.0,10.0,0.0,1.0);
-	sol.ptC = vector4dInit(10.0,10.0,0.0,1.0);
-	sol.ptD = vector4dInit(10.0,0.0,0.0,1.0);
+	sol.ptB = vector4dInit(0.0,1000.0,0.0,1.0);
+	sol.ptC = vector4dInit(1000.0,1000.0,0.0,1.0);
+	sol.ptD = vector4dInit(1000.0,0.0,0.0,1.0);
 
 	printf("aaa\n");
 	initSnake();
 	printf("bbb\n");
 
-	tete = vector4dInit(0.5,0.5,0.5,1.0);
+
 	recul = 10.0;
 	rotCamera = vector4dInit(0.0,0.0,1.0,1.0);
 	angle = 0.0;
@@ -106,32 +50,54 @@ void init()
 	sol.couleur = vector3dInit(1.0,0.0,0.0);
 }
 
-void Animer()
+void actionsClavier()
 {
-	rotationCube(cubeTete, angle);
-
-	glutPostRedisplay();
-}
-
-void GererClavier(unsigned char _touche, int _x, int _y)
-{
-	if(_touche == 'z')
+	if(bAvant == TRUE)
 	{
 		/*vector2D vecCamera = vector2dInit((tete.x - camera.x), (tete.y - camera.y));
 		vector2D vecCameraNorm = vector2dGetNorme(vecCamera);
 		tete.x += .1 * vecCameraNorm.x;
 		tete.y += .1 * vecCameraNorm.y;*/
-		translationCube(cubeTete, vector4dInit(1.0,0.0,0.0,1.0));
+		vector4D vecTranslation = vector4dGetNormalise(vector4dInit(cubeTete->ptE.x-cubeTete->ptA.x, cubeTete->ptE.y-cubeTete->ptA.y, cubeTete->ptE.z-cubeTete->ptA.z, 1.0));
+		translationCube(cubeTete, vecTranslation);
 	}
-	if(_touche == 'q')
-	{
-		angle -= 1.0;
-		//printf("X : %f\nY: %f\nZ: %f\n\n", sol.ptB.x, sol.ptB.y, sol.ptB.z);
-	}
-	if(_touche == 'd')
+	if(bGauche == TRUE)
 	{
 		angle += 1.0;
 	}
+	if(bDroite == TRUE)
+	{
+		angle -= 1.0;
+	}
+}
+
+void Animer()
+{
+	actionsClavier();
+	rotationCube(cubeTete, angle);
+	angle = 0.0;
+
+	glutPostRedisplay();
+}
+
+/**
+*Fonction qui gère l'appuie sur une touche
+**/
+void GererClavier(unsigned char _touche, int _x, int _y)
+{
+	if(_touche == 'z'){ bAvant = TRUE; }
+	if(_touche == 'q'){ bGauche = TRUE; }
+	if(_touche == 'd'){ bDroite = TRUE; }
+}
+
+/**
+*Fonction qui gère le relachement d'une touche
+**/
+void GererClavierUp(unsigned char _touche, int _x, int _y)
+{
+	if(_touche == 'z'){ bAvant = FALSE; }
+	if(_touche == 'q'){ bGauche = FALSE; }
+	if(_touche == 'd'){ bDroite = FALSE; }
 }
 
 void processMousePassiveMotion(int _x, int _y)
@@ -156,74 +122,20 @@ void trace_map()
 	afficherFaceQuad(sol);
 }
 
-void trace_cube()
-{
-	//glPushMatrix();
-	//glTranslatef(tete.x,tete.y,tete.z);
-	//glRotatef(angle, 0,0,1);
-	//glTranslatef(-tete.x,-tete.y,-tete.z);
-
-	glBegin(GL_QUADS);
-
-	//Cube Face_avant
-	glColor3f(0.0,1.0,0.0);
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//A
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//B
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//C
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//D
-
-	//Cube Face_arriere
-	glColor3f(0.0,1.0,0.0);
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//E
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//F
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//G
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//H
-
-	//Cube Face_gauche
-	glColor3f(0.0,0.0,1.0);
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//E
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//F
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//B
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//A
-
-	//Cube Face_droite
-	glColor3f(0.0,0.0,1.0);
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//D
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//C
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//G
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//H
-
-	//Cube Face_haut
-	glColor3f(1.0,0.0,1.0);
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//B
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//F
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z+SIZE_CUBE);		//G
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z+SIZE_CUBE);		//C
-
-	//Cube Face_bas
-	glColor3f(1.0,0.0,1.0);
-	glVertex3f(tete.x-SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//A
-	glVertex3f(tete.x-SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//E
-	glVertex3f(tete.x+SIZE_CUBE, tete.y+SIZE_CUBE, tete.z-SIZE_CUBE);		//H
-	glVertex3f(tete.x+SIZE_CUBE, tete.y-SIZE_CUBE, tete.z-SIZE_CUBE);		//D
-
-	glEnd();
-
-	//glPopMatrix();
-}
-
 void affichage()
 {
-	camera.x = tete.x + (recul * cos(rotCamera.x*(PI/180)) * cos(rotCamera.y*(PI/180)));
-	camera.y = tete.y + (recul * -(sin(rotCamera.x*(PI/180))) * cos(rotCamera.y*(PI/180)));
-	camera.z = tete.z + (recul * (sin(rotCamera.y*(PI/180))));
+	printf("CentreX : %f\nCentreY : %f\nCentreZ : %f\n", teteSnake.centre.x, teteSnake.centre.y, teteSnake.centre.z);
+
+	camera.x = teteSnake.centre.x + (recul * cos(rotCamera.x*(PI/180)) * cos(rotCamera.y*(PI/180)));
+	camera.y = teteSnake.centre.y + (recul * -(sin(rotCamera.x*(PI/180))) * cos(rotCamera.y*(PI/180)));
+	camera.z = teteSnake.centre.z + (recul * (sin(rotCamera.y*(PI/180))));
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	glFrustum(-4.8,4.8,-2.7,2.7,2,500);
-	gluLookAt(camera.x, camera.y, camera.z, tete.x, tete.y, tete.z,0,0,1);
+	gluLookAt(camera.x, camera.y, camera.z, teteSnake.centre.x, teteSnake.centre.y, teteSnake.centre.z,0,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -251,6 +163,7 @@ int main(int argc, char *argv[])
   	glutDisplayFunc(affichage);
 	glutIdleFunc(Animer);
 	glutKeyboardFunc(GererClavier);
+	glutKeyboardUpFunc(GererClavierUp);
 	glutPassiveMotionFunc(processMousePassiveMotion);
 
   	glutMainLoop();

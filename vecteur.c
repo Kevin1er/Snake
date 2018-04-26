@@ -62,6 +62,14 @@ GLfloat vector4dGetScalaire(vector4D _vector, vector4D _vector2)
 }
 
 /**
+*Fonction qui retourne l'opposé d'un vector
+**/
+vector4D vector4dGetOppose(vector4D _vecteur)
+{
+    return vector4dInit(-_vecteur.x,-_vecteur.y,-_vecteur.z,_vecteur.w);
+}
+
+/**
 *Fonction d'initialisation d'un vecteur 3D avec des valeurs données.
 **/
 vector3D vector3dInit(GLfloat _x, GLfloat _y, GLfloat _z)

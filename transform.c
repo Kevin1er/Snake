@@ -21,6 +21,16 @@ vector4D translation(vector4D _obj, vector4D _vector)
 }
 
 /*
+*   Fonction qui translate un objet vers un point
+*/
+vector4D deplacement(vector4D _obj, vector4D _point)
+{
+    vector4D vector = vector4dInit(_point.x-_obj.x, _point.y-_obj.y, _point.z-_obj.z,1.0);
+
+    return translation(_obj, vector);
+}
+
+/*
 *   Fonction qui réalise une rotation.
 */
 vector4D rotation(vector4D _obj, GLfloat _angle, vector4D _vector)
@@ -51,9 +61,16 @@ vector4D rotation(vector4D _obj, GLfloat _angle, vector4D _vector)
     return matMult(matRotation, _obj);
 }
 
-vector4D rotationZ(vector4D _obj, GLfloat _angle)
+/*
+* Fonction de rotation d'un point autour de l'axe Z
+*/
+vector4D rotationZ(vector4D _obj, GLfloat _angle, vector4D _centre)
 {
     mat4x4 matRotation;
+    vector4D result, vecTranslation;
+
+    vecTranslation = translation(_obj, vector4dInit(0.0-_centre.x, 0.0-_centre.y, 0.0-_centre.z, 1.0));
+
     matRotation.x[0] = cos(_angle*PI/180);
     matRotation.x[1] = - sin(_angle*PI/180);
     matRotation.x[2] = 0.0;
@@ -74,9 +91,11 @@ vector4D rotationZ(vector4D _obj, GLfloat _angle)
     matRotation.w[2] = 0.0;
     matRotation.w[3] = 1.0;
 
+    result = matMult(matRotation, vecTranslation);
+
     printf("Angle : %f\n", sin(_angle*PI/180));
 
-    return matMult(matRotation, _obj);
+    return translation(result, _centre);
 }
 
 /*
