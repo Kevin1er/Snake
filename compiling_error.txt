@@ -1,7 +1,0 @@
-/tmp/cccf5ddW.o : Dans la fonction « init » :
-main.c:(.text+0x1d) : référence indéfinie vers « vector3dInit »
-main.c:(.text+0x51) : référence indéfinie vers « vector2dInit »
-/tmp/cccf5ddW.o : Dans la fonction « GererClavier » :
-main.c:(.text+0xbc) : référence indéfinie vers « vector2dInit »
-main.c:(.text+0xd7) : référence indéfinie vers « vector2dGetNorme »
-collect2: error: ld returned 1 exit status

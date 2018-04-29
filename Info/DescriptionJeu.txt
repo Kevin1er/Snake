@@ -1,8 +1,8 @@
 Jeu Snake :
-- Déplacements libres (Avant, Arrière, Gauche, Droite, Haut, Bas);
+- Déplacements libres (Avant, Gauche, Droite, Haut, Bas);
 - Haut et Bas disponibles quand contact avec un mur, trou;
 - Caméra en vue 3ème personne (Caméra en dessus et en arrière);
-- Plusieurs niveaux (Ville, Maison, ...);
+- Plusieurs niveaux (Maison, ...);
 - Mouvements du serpent libres;
 - Objets du décors en mouvement;
 - Objets à ramasser pour obtenir des bonus / malus (Grandir, Rapetisser, Effets caméra, ...);
