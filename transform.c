@@ -93,7 +93,7 @@ vector4D rotationZ(vector4D _obj, GLfloat _angle, vector4D _centre)
 
     result = matMult(matRotation, vecTranslation);
 
-    printf("Angle : %f\n", sin(_angle*PI/180));
+    //printf("Angle : %f\n", sin(_angle*PI/180));
 
     return translation(result, _centre);
 }
