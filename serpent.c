@@ -38,7 +38,6 @@ void serpentAddCorps(serpent * _serpent, int _nombre, GLfloat _taille)
         {
             _serpent->corps[itFor] = initCube(vector4dInit(_serpent->corps[itFor-1].centre.x + (distance), _serpent->corps[itFor-1].centre.y, _serpent->corps[itFor-1].centre.z, _serpent->corps[itFor-1].centre.w), _taille);
             _serpent->taille++;
-            distance += 2*_taille;
         }
     }
     else
