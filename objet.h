@@ -1,3 +1,6 @@
+#ifndef OBJET_H
+#define OBJET_H
+
 #include "transform.h"
 
 typedef struct faceQuad faceQuad;
@@ -19,3 +22,5 @@ void afficherFaceQuad(faceQuad _face);
 void afficherCube(cube _cube);
 void rotationCube(cube* _cube, GLfloat _angle);
 void translationCube(cube* _cube, vector4D _vector);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef SERPENT_H
+#define SERPENT_H
+
 #include "objet.h"
 
 #define TAILLE_MAX 50
@@ -16,3 +19,5 @@ void serpentAddCorps(serpent * _serpent, int _nombre, GLfloat _taille);
 void serpentRemoveCorps(serpent * _serpent, int _nombre);
 void serpentAfficher(serpent _serpent);
 void serpentDeplacement(serpent * _serpent);
+
+#endif

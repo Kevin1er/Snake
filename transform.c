@@ -1,7 +1,4 @@
 #include <math.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
-#include <stdio.h>
 #include "transform.h"
 
 #define PI 3.14
@@ -55,8 +52,6 @@ vector4D rotation(vector4D _obj, GLfloat _angle, vector4D _vector)
     matRotation.w[1] = 0.0;
     matRotation.w[2] = 0.0;
     matRotation.w[3] = 1.0;
-
-    printf("Angle : %f\n", sin(_angle*PI/180));
 
     return matMult(matRotation, _obj);
 }

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "serpent.h"
+#include "collider.h"
 
 #define SIZE_CUBE 0.5
 #define PI 3.14
@@ -25,6 +26,8 @@ serpent* serpentTest = &test;
 
 faceQuad sol;
 
+colliderSysteme colliderSystemeTest;
+
 int bAvant, bGauche, bDroite, countTest;
 
 /*
@@ -45,6 +48,13 @@ void init()
 	*Zone tests
 	*/
 		countTest = 0;
+
+		colliderSystemeTest = colliderSystemeInit();
+		collider colliderTest = colliderInit(&colliderSystemeTest, &serpentTest->tete, 2);
+
+		//cube cubeTest =
+		printf("TEST COLLIDER TYPE : %i\n", colliderSystemeTest.tabCollider[0]->type);
+		printf("TEST COLLIDER VOLUME : %f\n", colliderSystemeTest.tabCollider[0]->volume->ptA.x);
 	/*
 	*Fin zone tests
 	*/
@@ -116,6 +126,8 @@ void Animer()
 	//rotationCube(cubeTete, angle);
 	rotationCube(&serpentTest->tete, angle);
 	angle = 0.0;
+
+	printf("TEST COLLIDER VOLUME : %f\n", colliderSystemeTest.tabCollider[0]->volume->ptA.x);
 
 	glutPostRedisplay();
 }

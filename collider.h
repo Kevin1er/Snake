@@ -1,3 +1,6 @@
+#ifndef COLLIDER_H
+#define COLLIDER_H
+
 #include "objet.h"
 
 #define TYPE_SOL 0
@@ -13,7 +16,7 @@
 typedef struct collider collider;
 struct collider
 {
-    cube volume;
+    cube * volume;
     int type;
 };
 
@@ -24,9 +27,12 @@ typedef struct colliderSysteme colliderSysteme;
 struct colliderSysteme
 {
     int taille;
-    collider tabCollider[];
+    int nbCollider;
+    collider ** tabCollider;
 };
 
-void colliderSystemeInit();
-void colliderSystemeAdd(collider * _collider);
-void colliderInit(colliderSysteme * _systeme, cube * _obj, int _type);
+colliderSysteme colliderSystemeInit();
+void colliderSystemeAdd(colliderSysteme * _systeme, collider * _collider);
+collider colliderInit(colliderSysteme * _systeme, cube * _obj, int _type);
+
+#endif
